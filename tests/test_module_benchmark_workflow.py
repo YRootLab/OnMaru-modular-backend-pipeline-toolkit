@@ -75,8 +75,22 @@ def test_workflow_is_read_only_secret_free_and_publishes_evidence_artifacts():
     assert "actions/download-artifact@v4" in text
     assert "module-evidence-${{ matrix.id }}" in text
     assert "module-benchmark-report" in text
-    assert "module-benchmark-${{ github.repository }}-${{ matrix.id }}" in text
-    assert "module-benchmark-${{ github.repository }}-${{ matrix.resource_profile }}" not in text
+    concurrency_group = workflow["jobs"]["module-test"]["concurrency"]["group"]
+    assert "${{ matrix.id }}" in concurrency_group
+    assert "${{ matrix.resource_profile }}" not in concurrency_group
+
+
+def test_module_concurrency_is_isolated_per_workflow_run_and_attempt():
+    module_job = load_workflow()["jobs"]["module-test"]
+
+    assert module_job["concurrency"] == {
+        "group": (
+            "module-benchmark-${{ github.repository }}-${{ github.run_id }}-"
+            "${{ github.run_attempt }}-${{ matrix.id }}"
+        ),
+        "cancel-in-progress": "false",
+    }
+    assert module_job["strategy"]["max-parallel"] == "${{ fromJSON(inputs.max_parallel) }}"
 
 
 def test_cross_repository_caller_pins_toolkit_checkout_to_its_explicit_immutable_ref():
