@@ -1,5 +1,13 @@
 # handoff.md
 
+- **Date**: 2026-09-27 cross-run module benchmark concurrency 수정 시작
+- **Branch**: `fix/107-run-scoped-module-concurrency`
+- **Related Issue**: #107 (OnMaru-backend PR #407 릴리스 차단)
+- **Root cause**: module concurrency group이 consumer/module까지만 구분해, 연속된 workflow run의 동일 module pending job이 GitHub Actions의 그룹당 pending 1개 제한으로 실행 전 취소된다.
+- **Scope**: reusable module benchmark의 concurrency key를 workflow run/attempt별로 격리하고 contract regression test를 추가한다. 동일 run 내부 병렬 한도는 `max_parallel`로 유지한다.
+- **Verification**: baseline 159 passed. RED focused 1 failed/5 passed (run identity 누락); GREEN focused 6 passed; full `bash scripts/verify_toolkit.sh` 160 passed, 91% coverage, workflow security 4 workflows passed; `git diff --check` passed.
+- **Next**: #107 PR을 `develop`에 병합한 뒤 immutable SHA를 OnMaru-backend caller에 반영하고 #407 benchmark를 재검증한다.
+
 - **Date**: 2026-09-26 module benchmark output newline 수정 시작
 - **Branch**: `fix/99-module-output-newlines`
 - **Related Issue**: #99 (blocks OnMaru-backend #365 rollout)
