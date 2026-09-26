@@ -1,5 +1,13 @@
 # handoff.md
 
+- **Date**: 2026-09-27 CI Toolkit 병렬화·benchmark 트러블슈팅 기록
+- **Branch**: `docs/110-ci-troubleshooting`
+- **Related Issue**: #110
+- **Scope**: OnMaru consumer의 직렬 기준선, module-per-runner shadow 결과, shared-workspace fan-out 개선, PR full-matrix 관측 비용을 사실·근본 원인·복구 정책으로 기록한다.
+- **Files**: `docs/reports/2026-09-27-onmaru-ci-toolkit-troubleshooting-journey.md`, `handoff.md`
+- **Verification**: 실행 링크·수치·Toolkit workflow 책임을 대조하고 `bash scripts/verify_toolkit.sh`, `git diff --check`를 실행한다.
+- **Decision recorded**: Module Benchmark는 nightly/manual/release 관측용이며, 일반 PR required gate는 shared-workspace의 path-aware Java 선택 실행으로 개선한다. 이 문서는 policy 기록일 뿐 workflow 변경을 포함하지 않는다.
+
 - **Date**: 2026-09-27 cross-run module benchmark concurrency 수정 시작
 - **Branch**: `fix/107-run-scoped-module-concurrency`
 - **Related Issue**: #107 (OnMaru-backend PR #407 릴리스 차단)
